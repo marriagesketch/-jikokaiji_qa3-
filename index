@@ -477,7 +477,7 @@
 </label>
 
 <!-- Q12 -->
-<label>Q12 ？</label>
+<label>Q12 意見が食い違ったときはどうしたいですか？</label>
 <textarea id="q12" class="detail-textarea"></textarea>
 
 <!-- Q13 -->
