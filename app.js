@@ -8,7 +8,7 @@
    ============================================================ */
 
 const LIFF_ID   = "2010671859-Cfdh3l1P";
-const DRAFT_KEY = "konkatsu_qa_part3_draft_v2";
+const DRAFT_KEY = "konkatsu_qa_part3_draft";
 
 // ▼▼▼ デプロイ済みGAS Web AppのURL ▼▼▼
 const GAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbyP0doHt4EODuHGMTHbTIEFiDxuuMKVeNN67hgrlg67ZezcZr3Elb0h6zGmaz4tytee/exec";
