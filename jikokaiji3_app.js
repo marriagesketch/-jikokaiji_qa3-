@@ -14,8 +14,28 @@ const DRAFT_KEY = "konkatsu_qa_part3_draft";
 const GAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbyP0doHt4EODuHGMTHbTIEFiDxuuMKVeNN67hgrlg67ZezcZr3Elb0h6zGmaz4tytee/exec";
 
 /* ============================================================
+   ワンポイントアドバイス（各質問の下に表示。回答欄ではなく案内文のみ）
+   ============================================================ */
+const Q_ADVICE = {
+  q1:  "指摘されたことについて、今はどう対策しているか聞いてみましょう",
+  q2:  "褒められて一番嬉しかったエピソードも聞いてみましょう",
+  q3:  "その壁をどうやって乗り越えたのか、\n乗り越えた後どう変わったかも聞いてみましょう",
+  q4:  "1位に選んだ理由や、その時間を何に使いたいかも聞いてみましょう",
+  q5:  "旅行や外出そのものが好きなタイプかも聞いてみましょう",
+  q6:  "1位に選んだ理由や、今それが手に入ったらまず何をしたいかも聞いてみましょう",
+  q7:  "その中で一番早く実現したいことはどれか聞いてみましょう",
+  q8:  "自分の親がしてくれたこと・してほしかったことも聞いてみましょう",
+  q9:  "サプライズは好きか、事前に相談して決めたいタイプかも聞いてみましょう",
+  q10: "自分が子どもの頃、習い事は好きだったか聞いてみましょう",
+  q11: "普段のお迎えや送迎はどちらが担当するイメージか聞いてみましょう",
+  q12: "話し合うときに絶対NGだと思う態度や言葉があるか聞いてみましょう",
+  q13: "相手の家庭ではどんなルール・家訓があったか聞いてみましょう",
+};
+
+/* ============================================================
    Base64URL 変換ユーティリティ（AES鍵・暗号文の符号化に使用）
    ============================================================ */
+
 function bufToBase64Url(buf) {
   const bytes = new Uint8Array(buf);
   let binary = "";
@@ -544,24 +564,24 @@ function renderViewMode(data, options = {}) {
   // ← 修正：Q12をrows配列の内側に正しく追加
   const rows = [
     { q: "Q1 会社でどんなことを褒められますか？",
-      a: `褒められること：${data.q1good || "未回答"}\n注意されること：${data.q1bad || "未回答"}` },
+      a: `褒められること：${data.q1good || "未回答"}\n注意されること：${data.q1bad || "未回答"}`, tip: Q_ADVICE.q1 },
     { q: "Q2 友人や元恋人からどんなことを褒められますか？",
-      a: `褒められること：${data.q2good || "未回答"}\n注意されること：${data.q2bad || "未回答"}` },
-    { q: "Q3 人生で「一番大きな壁・挫折」だったと感じる出来事は何ですか？", a: data.q3 || "未回答" },
+      a: `褒められること：${data.q2good || "未回答"}\n注意されること：${data.q2bad || "未回答"}`, tip: Q_ADVICE.q2 },
+    { q: "Q3 人生で「一番大きな壁・挫折」だったと感じる出来事は何ですか？", a: data.q3 || "未回答", tip: Q_ADVICE.q3 },
     { q: "Q4 次の働き方・休暇について、もし実現できたら嬉しい順",
-      html: rankingListHTML(data.q4) },
+      html: rankingListHTML(data.q4), tip: Q_ADVICE.q4 },
     { q: "Q5 子どものころ、家族で出かけるときの移動手段は？",
-      a: q5Labels[data.q5] || "未回答" },
+      a: q5Labels[data.q5] || "未回答", tip: Q_ADVICE.q5 },
     { q: "Q6 次の中でも手に入るとしたら嬉しい順",
-      html: rankingListHTML(data.q6) },
-    { q: "Q7 結婚したら2人でしたいことは何ですか？", a: data.q7 || "未回答" },
-    { q: "Q8 子どもが生まれたら家族でしたいことは何ですか？", a: data.q8 || "未回答" },
+      html: rankingListHTML(data.q6), tip: Q_ADVICE.q6 },
+    { q: "Q7 結婚したら2人でしたいことは何ですか？", a: data.q7 || "未回答", tip: Q_ADVICE.q7 },
+    { q: "Q8 子どもが生まれたら家族でしたいことは何ですか？", a: data.q8 || "未回答", tip: Q_ADVICE.q8 },
     { q: "Q9 記念日や誕生日、クリスマスなどのイベントごとはどう過ごしたいですか？（複数選択）",
-      html: q9AnswerHTML(data) },
-    { q: "Q10 習い事に興味がない息子にどうしますか？", a: q10Labels[data.q10] || "未回答" },
-    { q: "Q11 塾の迎えに行けない日、どうしますか？",  a: q11Labels[data.q11] || "未回答" },
-    { q: "Q12 意見が食い違ったときはどうしたいですか？",  a: data.q12 || "未回答" },
-    { q: "Q13 夫婦や家族のなかで守っていきたいルール、家訓はありますか？",  a: data.q13 || "未回答" },
+      html: q9AnswerHTML(data), tip: Q_ADVICE.q9 },
+    { q: "Q10 習い事に興味がない息子にどうしますか？", a: q10Labels[data.q10] || "未回答", tip: Q_ADVICE.q10 },
+    { q: "Q11 塾の迎えに行けない日、どうしますか？",  a: q11Labels[data.q11] || "未回答", tip: Q_ADVICE.q11 },
+    { q: "Q12 意見が食い違ったときはどうしたいですか？",  a: data.q12 || "未回答", tip: Q_ADVICE.q12 },
+    { q: "Q13 夫婦や家族のなかで守っていきたいルール、家訓はありますか？",  a: data.q13 || "未回答", tip: Q_ADVICE.q13 },
   ];
 
   hideFormElements();
@@ -597,10 +617,16 @@ function renderViewMode(data, options = {}) {
     </div>
     ` : ""}
 
-    ${rows.map(({ q, a, html }) => `
+    ${rows.map(({ q, a, html, tip }) => `
       <div class="view-item">
         <p class="view-question">${escapeHTML(q)}</p>
         <p class="view-answer">${html ? html : escapeHTML(a).replace(/\n/g, "<br>")}</p>
+        ${tip ? `
+        <div class="view-tip">
+          <span class="view-tip-icon">💡</span>
+          <p class="view-tip-text"><strong>あわせて聞いてみましょう：</strong><br>${escapeHTML(tip).replace(/\n/g, "<br>")}</p>
+        </div>
+        ` : ""}
       </div>
     `).join("")}
 
