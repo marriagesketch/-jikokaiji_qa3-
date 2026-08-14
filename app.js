@@ -7,7 +7,7 @@
    （URLの # 以降はブラウザからサーバーへ送信されないため）。
    ============================================================ */
 
-const LIFF_ID   = "2010671859-Cfdh3l1P";
+const LIFF_ID   = "2010312230-bMhTf6he";
 const DRAFT_KEY = "konkatsu_qa_part3_draft";
 const PENDING_SHARED_VIEW_KEY = "konkatsu_qa_part3_pending_shared_view";
 
